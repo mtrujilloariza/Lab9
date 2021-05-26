@@ -56,7 +56,22 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "87a189acb9564c29831dee34fd9612ae"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                          
+  <script>
+
+    window.onerror = function() {
+        console.log("an error occurred");
+        TrackJS.track('Testing TrackJS!');
+    };
+
+
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
       let output = document.querySelector('output');
@@ -68,6 +83,77 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    errorBtns[0].addEventListener('click', ()=> {
+      console.log("Console log Example");
+    })
+
+    errorBtns[1].addEventListener('click', ()=> {
+      console.error("Console Error Example");
+    })
+
+    errorBtns[2].addEventListener('click', ()=> {
+      console.dir(errorBtns[2]);
+    })
+
+    errorBtns[3].addEventListener('click', ()=> {
+      console.dirxml(errorBtns[3]);
+    })
+
+    errorBtns[4].addEventListener('click', () => {
+      console.error({msg: "Doh!"});
+    })
+
+    errorBtns[5].addEventListener('click', () => {
+      console.group('log group');
+    })
+
+    errorBtns[6].addEventListener('click', () => {
+      console.groupEnd();
+    })
+
+    errorBtns[7].addEventListener('click', () => {
+      console.table([{'number': 2, 'number2': 785}, {'number' : 5, 'number2': 2342}, {'number': 100, 'number2': 3242}]);
+    })
+
+    errorBtns[8].addEventListener('click', () => {
+      console.log('Timer Started');
+      console.time();
+    })
+
+    errorBtns[9].addEventListener('click', () => {
+      console.log('Timer Ended')
+      console.timeEnd();
+    })
+
+    errorBtns[10].addEventListener('click', () => {
+      traceFunction();
+    })
+
+    
+    errorBtns[11].addEventListener('click', () => {
+      try {
+        document.getElementById('NonexistentId').innerHTML = "Very Important Sentence";
+      } catch (err) {
+        throw new InnerHtmlError();
+      } finally {
+        console.log("Attempted to set inner html of object")
+      }
+    })
+
+    function traceFunction(){
+      console.trace()
+    }
+
+
+    class InnerHtmlError extends Error {
+      constructor(message) {
+        super(message); // (1)
+        this.name = "InnerHTML ERROR"; // (2)
+      }
+    }
+    
+
+
   </script>
 </body>
 </html>
